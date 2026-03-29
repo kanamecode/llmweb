@@ -8,103 +8,114 @@
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --bg: #f7f6f3; --surface: #ffffff; --border: #e8e5df;
+    --bg: #f7f6f3; --surface: #fff; --border: #e8e5df;
     --text-primary: #1a1a18; --text-secondary: #8a8880; --text-muted: #b8b5ae;
     --accent: #2d2d2a; --user-bubble: #1a1a18; --user-text: #f7f6f3;
-    --ai-bubble: #ffffff; --ai-text: #1a1a18;
+    --ai-bubble: #fff; --ai-text: #1a1a18;
   }
   html, body { height: 100%; font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text-primary); -webkit-font-smoothing: antialiased; }
   #app { display: flex; flex-direction: column; height: 100dvh; max-width: 480px; margin: 0 auto; background: var(--bg); position: relative; }
+
+  /* Header */
   header { padding: 14px 20px 12px; border-bottom: 1px solid var(--border); background: var(--bg); position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 10px; }
-  .header-dot { width: 8px; height: 8px; border-radius: 50%; background: #ccc; transition: background 0.4s; flex-shrink: 0; }
-  .header-dot.ready { background: #4caf82; box-shadow: 0 0 0 3px rgba(76,175,130,.18); animation: pulse 2.5s ease-in-out infinite; }
-  .header-dot.loading { background: #f0a030; }
+  .hdot { width: 8px; height: 8px; border-radius: 50%; background: #ccc; transition: background .4s; flex-shrink: 0; }
+  .hdot.ready { background: #4caf82; animation: pulse 2.5s ease-in-out infinite; }
+  .hdot.spin { background: #f0a030; }
   @keyframes pulse { 0%,100%{box-shadow:0 0 0 2px rgba(76,175,130,.2)} 50%{box-shadow:0 0 0 5px rgba(76,175,130,.1)} }
-  .header-title { font-size: 15px; font-weight: 500; }
-  .header-badge { margin-left: auto; font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); letter-spacing: .03em; }
-  #loading-screen { position: absolute; inset: 0; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 32px; z-index: 100; }
-  .load-icon { font-size: 36px; opacity: .5; margin-bottom: 4px; }
-  .load-title { font-size: 15px; font-weight: 500; }
-  .load-sub { font-size: 12px; color: var(--text-secondary); text-align: center; line-height: 1.6; }
-  .device-badge { font-family: 'DM Mono', monospace; font-size: 11px; background: var(--border); border-radius: 10px; padding: 3px 10px; color: var(--text-secondary); }
-  .device-badge.gpu { background: #e8f5ee; color: #2d7a52; }
-  .device-badge.cpu { background: #fef3e2; color: #a06020; }
-  .progress-wrap { width: 100%; max-width: 260px; }
-  .progress-bar { height: 3px; background: #e8e5df; border-radius: 2px; overflow: hidden; }
-  .progress-fill { height: 100%; background: var(--accent); border-radius: 2px; width: 0%; transition: width .3s ease; }
-  .progress-label { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); margin-top: 6px; text-align: right; }
-  .load-status { font-size: 11px; color: var(--text-secondary); text-align: center; min-height: 18px; max-width: 280px; word-break: break-all; }
-  .error-box { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 32px; text-align: center; }
-  .error-title { font-size: 15px; font-weight: 500; color: #c0392b; }
-  .error-body { font-size: 12.5px; color: var(--text-secondary); line-height: 1.6; }
-  .retry-btn { margin-top: 8px; padding: 10px 24px; background: var(--accent); color: #fff; border: none; border-radius: 24px; font-family: 'Noto Sans JP', sans-serif; font-size: 13px; cursor: pointer; }
+  .htitle { font-size: 15px; font-weight: 500; }
+  .hbadge { margin-left: auto; font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); }
+
+  /* Loading */
+  #loading { position: absolute; inset: 0; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 32px; z-index: 100; }
+  .licon { font-size: 36px; opacity: .45; margin-bottom: 4px; }
+  .ltitle { font-size: 15px; font-weight: 500; }
+  .lsub { font-size: 12px; color: var(--text-secondary); text-align: center; line-height: 1.7; }
+  .dbadge { font-family: 'DM Mono', monospace; font-size: 11px; border-radius: 10px; padding: 3px 12px; }
+  .dbadge.gpu { background: #e8f5ee; color: #2d7a52; }
+  .dbadge.cpu { background: #fef3e2; color: #a06020; }
+  .dbadge.checking { background: var(--border); color: var(--text-secondary); }
+  .pwrap { width: 100%; max-width: 260px; }
+  .pbar { height: 3px; background: #e8e5df; border-radius: 2px; overflow: hidden; }
+  .pfill { height: 100%; background: var(--accent); border-radius: 2px; width: 0%; transition: width .3s; }
+  .plabel { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); margin-top: 6px; text-align: right; }
+  .lstatus { font-size: 11px; color: var(--text-secondary); text-align: center; min-height: 16px; max-width: 280px; }
+  .errbox { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 8px; text-align: center; }
+  .errtitle { font-size: 15px; font-weight: 500; color: #c0392b; }
+  .errbody { font-size: 12px; color: var(--text-secondary); line-height: 1.7; }
+  .rbtn { padding: 10px 24px; background: var(--accent); color: #fff; border: none; border-radius: 24px; font-family: 'Noto Sans JP', sans-serif; font-size: 13px; cursor: pointer; margin-top: 4px; }
+
+  /* Messages */
   #messages { flex: 1; overflow-y: auto; padding: 20px 16px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
   #messages::-webkit-scrollbar { display: none; }
-  .msg-row { display: flex; opacity: 0; transform: translateY(8px); animation: fadeUp .25s ease forwards; }
+  .mrow { display: flex; opacity: 0; transform: translateY(8px); animation: fadeUp .25s ease forwards; }
   @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
-  .msg-row.user { justify-content: flex-end; }
-  .msg-row.ai   { justify-content: flex-start; }
+  .mrow.user { justify-content: flex-end; }
+  .mrow.ai   { justify-content: flex-start; }
   .bubble { max-width: 78%; padding: 11px 14px; border-radius: 18px; font-size: 14.5px; line-height: 1.65; font-weight: 300; word-break: break-word; white-space: pre-wrap; }
-  .msg-row.user .bubble { background: var(--user-bubble); color: var(--user-text); border-bottom-right-radius: 5px; }
-  .msg-row.ai   .bubble { background: var(--ai-bubble); color: var(--ai-text); border: 1px solid var(--border); border-bottom-left-radius: 5px; }
+  .mrow.user .bubble { background: var(--user-bubble); color: var(--user-text); border-bottom-right-radius: 5px; }
+  .mrow.ai   .bubble { background: var(--ai-bubble); color: var(--ai-text); border: 1px solid var(--border); border-bottom-left-radius: 5px; }
   .bubble.streaming::after { content: '▍'; display: inline-block; animation: blink .7s step-end infinite; margin-left: 1px; font-size: 12px; opacity: .7; }
   @keyframes blink { 0%,100%{opacity:.7} 50%{opacity:0} }
-  #empty-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 24px; text-align: center; gap: 6px; color: var(--text-muted); }
-  #empty-state .icon { font-size: 32px; opacity: .5; margin-bottom: 8px; }
-  #empty-state .title { font-size: 15px; font-weight: 400; color: var(--text-secondary); }
-  #empty-state .hint  { font-size: 12.5px; line-height: 1.5; }
-  .suggestions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 16px; }
+
+  /* Empty */
+  #empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 24px; text-align: center; gap: 6px; color: var(--text-muted); }
+  #empty .eicon { font-size: 32px; opacity: .45; margin-bottom: 8px; }
+  #empty .etitle { font-size: 15px; font-weight: 400; color: var(--text-secondary); }
+  #empty .ehint  { font-size: 12.5px; line-height: 1.5; }
+  .sugs { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 16px; }
   .chip { border: 1px solid var(--border); background: var(--surface); border-radius: 20px; padding: 7px 13px; font-size: 12.5px; font-family: 'Noto Sans JP', sans-serif; color: var(--text-secondary); cursor: pointer; -webkit-tap-highlight-color: transparent; }
   .chip:active { background: var(--accent); color: #fff; border-color: var(--accent); }
-  #input-area { padding: 10px 12px calc(16px + env(safe-area-inset-bottom)); background: var(--bg); border-top: 1px solid var(--border); }
-  .input-row { display: flex; align-items: flex-end; gap: 8px; background: #fff; border: 1px solid var(--border); border-radius: 26px; padding: 6px 6px 6px 16px; transition: border-color .15s; }
-  .input-row:focus-within { border-color: #aaa; }
-  #user-input { flex: 1; border: none; outline: none; background: transparent; font-family: 'Noto Sans JP', sans-serif; font-size: 16px; font-weight: 300; color: var(--text-primary); resize: none; max-height: 120px; min-height: 24px; line-height: 1.5; padding: 4px 0; -webkit-appearance: none; }
-  #user-input::placeholder { color: var(--text-muted); }
-  #send-btn { width: 36px; height: 36px; border-radius: 50%; border: none; background: var(--accent); color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform .1s; -webkit-tap-highlight-color: transparent; }
-  #send-btn:active { transform: scale(.9); }
-  #send-btn:disabled { background: var(--border); cursor: default; }
-  #send-btn svg { width: 16px; height: 16px; }
+
+  /* Input */
+  #inputarea { padding: 10px 12px calc(16px + env(safe-area-inset-bottom)); background: var(--bg); border-top: 1px solid var(--border); }
+  .irow { display: flex; align-items: flex-end; gap: 8px; background: #fff; border: 1px solid var(--border); border-radius: 26px; padding: 6px 6px 6px 16px; transition: border-color .15s; }
+  .irow:focus-within { border-color: #aaa; }
+  #inp { flex: 1; border: none; outline: none; background: transparent; font-family: 'Noto Sans JP', sans-serif; font-size: 16px; font-weight: 300; color: var(--text-primary); resize: none; max-height: 120px; min-height: 24px; line-height: 1.5; padding: 4px 0; -webkit-appearance: none; }
+  #inp::placeholder { color: var(--text-muted); }
+  #sbtn { width: 36px; height: 36px; border-radius: 50%; border: none; background: var(--accent); color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform .1s; -webkit-tap-highlight-color: transparent; }
+  #sbtn:active { transform: scale(.9); }
+  #sbtn:disabled { background: var(--border); cursor: default; }
+  #sbtn svg { width: 16px; height: 16px; }
 </style>
 </head>
 <body>
 <div id="app">
   <header>
-    <div class="header-dot" id="status-dot"></div>
-    <span class="header-title">AI アシスタント</span>
-    <span class="header-badge" id="header-badge">起動中…</span>
+    <div class="hdot" id="hdot"></div>
+    <span class="htitle">AI アシスタント</span>
+    <span class="hbadge" id="hbadge">起動中…</span>
   </header>
 
-  <div id="loading-screen">
-    <div class="load-icon">⬡</div>
-    <div class="load-title">モデルを読み込んでいます</div>
-    <div class="load-sub">初回は約400MBのダウンロードが発生します。<br>2回目以降はキャッシュから即時起動します。</div>
-    <div class="device-badge" id="device-badge">デバイス確認中…</div>
-    <div class="progress-wrap">
-      <div class="progress-bar"><div class="progress-fill" id="prog-fill"></div></div>
-      <div class="progress-label" id="prog-label">0%</div>
+  <div id="loading">
+    <div class="licon">⬡</div>
+    <div class="ltitle">モデルを読み込んでいます</div>
+    <div class="lsub">初回は約300MBのダウンロードが発生します。<br>2回目以降はキャッシュから即起動します。</div>
+    <div class="dbadge checking" id="dbadge">デバイス確認中…</div>
+    <div class="pwrap">
+      <div class="pbar"><div class="pfill" id="pfill"></div></div>
+      <div class="plabel" id="plabel">0%</div>
     </div>
-    <div class="load-status" id="load-status">初期化中…</div>
+    <div class="lstatus" id="lstatus">初期化中…</div>
   </div>
 
   <div id="messages" style="display:none">
-    <div id="empty-state">
-      <div class="icon">✦</div>
-      <div class="title">何でも聞いてください</div>
-      <div class="hint">完全オフラインで動作しています</div>
-      <div class="suggestions">
-        <button class="chip" onclick="useSuggestion(this)">自己紹介して</button>
-        <button class="chip" onclick="useSuggestion(this)">簡単なレシピを教えて</button>
-        <button class="chip" onclick="useSuggestion(this)">英語に翻訳して</button>
-        <button class="chip" onclick="useSuggestion(this)">アイデアを出して</button>
+    <div id="empty">
+      <div class="eicon">✦</div>
+      <div class="etitle">何でも聞いてください</div>
+      <div class="ehint">完全オフラインで動作しています</div>
+      <div class="sugs">
+        <button class="chip" onclick="useSug(this)">自己紹介して</button>
+        <button class="chip" onclick="useSug(this)">簡単なレシピを教えて</button>
+        <button class="chip" onclick="useSug(this)">英語に翻訳して</button>
+        <button class="chip" onclick="useSug(this)">アイデアを出して</button>
       </div>
     </div>
   </div>
 
-  <div id="input-area" style="display:none">
-    <div class="input-row">
-      <textarea id="user-input" placeholder="メッセージを入力…" rows="1" disabled></textarea>
-      <button id="send-btn" disabled>
+  <div id="inputarea" style="display:none">
+    <div class="irow">
+      <textarea id="inp" placeholder="メッセージを入力…" rows="1" disabled></textarea>
+      <button id="sbtn" disabled>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/>
         </svg>
@@ -114,182 +125,158 @@
 </div>
 
 <script type="module">
-import { pipeline, TextStreamer, env } from 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.5.0/dist/transformers.min.js';
+// WebLLM — iOS Safari 含む全ブラウザ対応
+import { CreateMLCEngine } from "https://esm.run/@mlc-ai/web-llm";
 
-const MODEL = 'onnx-community/Qwen2.5-0.5B-Instruct';
+// iPhone Safari でも動く小さめモデル
+// SmolLM2-1.7B は WebGPU 必須、Qwen2.5-0.5B-Instruct-q4f16_1 は Safari WebGPU で動作実績あり
+const MODELS = [
+  "Qwen2.5-0.5B-Instruct-q4f16_1-MLC",   // ~300MB, Safari WebGPU OK
+  "SmolLM2-360M-Instruct-q4f16_1-MLC",   // ~200MB, フォールバック用
+];
 
-const dot         = document.getElementById('status-dot');
-const badge       = document.getElementById('header-badge');
-const loadScreen  = document.getElementById('loading-screen');
-const deviceBadge = document.getElementById('device-badge');
-const messagesEl  = document.getElementById('messages');
-const inputArea   = document.getElementById('input-area');
-const inputEl     = document.getElementById('user-input');
-const sendBtn     = document.getElementById('send-btn');
-const progFill    = document.getElementById('prog-fill');
-const progLabel   = document.getElementById('prog-label');
-const loadStatus  = document.getElementById('load-status');
+const hdot    = document.getElementById('hdot');
+const hbadge  = document.getElementById('hbadge');
+const loading = document.getElementById('loading');
+const dbadge  = document.getElementById('dbadge');
+const pfill   = document.getElementById('pfill');
+const plabel  = document.getElementById('plabel');
+const lstatus = document.getElementById('lstatus');
+const msgs    = document.getElementById('messages');
+const iarea   = document.getElementById('inputarea');
+const inp     = document.getElementById('inp');
+const sbtn    = document.getElementById('sbtn');
 
-let generator = null, history = [], isGenerating = false;
+let engine = null, history = [], busy = false;
 
-// ── デバイス判定 ──
-async function detectDevice() {
-  // 1. WebGPU APIが存在するか
-  if (!navigator.gpu) return 'wasm';
-  // 2. 実際にアダプターが取得できるか（iOSなど APIあり但し無効なケース対策）
+// ── WebGPU チェック（実際にアダプター取得まで確認）──
+async function checkWebGPU() {
+  if (!navigator.gpu) return false;
   try {
     const adapter = await navigator.gpu.requestAdapter();
-    if (!adapter) return 'wasm';
-    // 3. ソフトウェアレンダラー（fallback adapter）は遅いのでCPUへ
-    const info = adapter.info || {};
-    const isSoftware = (info.architecture || '').toLowerCase().includes('software')
-                    || (info.description  || '').toLowerCase().includes('software')
-                    || (info.vendor       || '').toLowerCase().includes('google');
-    return isSoftware ? 'wasm' : 'webgpu';
-  } catch {
-    return 'wasm';
-  }
+    return !!adapter;
+  } catch { return false; }
 }
 
 async function init() {
-  dot.className = 'header-dot loading';
+  hdot.className = 'hdot spin';
 
-  const device = await detectDevice();
-  const isGPU  = device === 'webgpu';
+  const hasGPU = await checkWebGPU();
+  dbadge.textContent = hasGPU ? '⚡ WebGPU' : '— WebGPU 非対応';
+  dbadge.className   = 'dbadge ' + (hasGPU ? 'gpu' : 'cpu');
 
-  deviceBadge.textContent  = isGPU ? '⚡ GPU (WebGPU)' : '🧮 CPU (wasm)';
-  deviceBadge.className    = 'device-badge ' + (isGPU ? 'gpu' : 'cpu');
-  badge.textContent        = isGPU ? 'GPU' : 'CPU';
-
-  // CPU時はスレッド数を抑える（モバイル向け）
-  if (!isGPU) {
-    env.backends.onnx.wasm.numThreads = navigator.hardwareConcurrency
-      ? Math.min(navigator.hardwareConcurrency, 4)
-      : 2;
+  if (!hasGPU) {
+    showError(
+      'WebGPU が使えません',
+      'このブラウザはWebGPUに対応していません。<br><br>' +
+      '✅ 対応ブラウザ：<br>' +
+      'iPhone: Safari 17以降（iOS 17+）<br>' +
+      'Android: Chrome 113以降<br>' +
+      'PC: Chrome / Edge 113以降'
+    );
+    return;
   }
 
-  try {
-    generator = await pipeline('text-generation', MODEL, {
-      dtype: 'q4',
-      device,
-      progress_callback: (p) => {
-        if (p.status === 'downloading' || p.status === 'progress') {
-          const pct = p.progress ? Math.round(p.progress) : 0;
-          progFill.style.width = pct + '%';
-          progLabel.textContent = pct + '%';
-          const name = p.file ? p.file.split('/').pop() : '';
-          loadStatus.textContent = name || '読み込み中…';
-        } else if (p.status === 'ready') {
-          loadStatus.textContent = '準備完了！';
+  // モデルを順番に試す
+  for (let i = 0; i < MODELS.length; i++) {
+    const model = MODELS[i];
+    lstatus.textContent = `モデル読み込み中 (${i+1}/${MODELS.length})…`;
+    pfill.style.width = '0%';
+    plabel.textContent = '0%';
+    try {
+      engine = await CreateMLCEngine(model, {
+        initProgressCallback: (r) => {
+          const pct = Math.round((r.progress || 0) * 100);
+          pfill.style.width = pct + '%';
+          plabel.textContent = pct + '%';
+          lstatus.textContent = r.text ? r.text.slice(0, 60) : '読み込み中…';
         }
+      });
+      // 成功
+      loading.style.display = 'none';
+      msgs.style.display    = 'flex';
+      iarea.style.display   = 'block';
+      inp.disabled = false;
+      hdot.className = 'hdot ready';
+      hbadge.textContent = '⚡ WebGPU';
+      return;
+    } catch(e) {
+      console.warn(`Model ${model} failed:`, e);
+      if (i === MODELS.length - 1) {
+        showError('読み込みエラー',
+          'モデルの読み込みに失敗しました。<br>Wi-Fi接続を確認して再試行してください。<br><br>' +
+          '<small style="opacity:.6">' + e.message.slice(0, 100) + '</small>');
       }
-    });
-
-    loadScreen.style.display = 'none';
-    messagesEl.style.display = 'flex';
-    inputArea.style.display  = 'block';
-    inputEl.disabled = false;
-    dot.className = 'header-dot ready';
-    badge.textContent = isGPU ? '⚡ GPU' : '🧮 CPU';
-
-  } catch(e) {
-    console.error(e);
-    // WebGPU失敗時はCPUで再試行
-    if (isGPU) {
-      loadStatus.textContent = 'GPU失敗 → CPUで再試行中…';
-      deviceBadge.textContent = '🧮 CPU (wasm) にフォールバック';
-      deviceBadge.className = 'device-badge cpu';
-      try {
-        env.backends.onnx.wasm.numThreads = 2;
-        generator = await pipeline('text-generation', MODEL, {
-          dtype: 'q4', device: 'wasm',
-          progress_callback: (p) => {
-            if (p.status === 'downloading' || p.status === 'progress') {
-              const pct = p.progress ? Math.round(p.progress) : 0;
-              progFill.style.width = pct + '%';
-              progLabel.textContent = pct + '%';
-            }
-          }
-        });
-        loadScreen.style.display = 'none';
-        messagesEl.style.display = 'flex';
-        inputArea.style.display  = 'block';
-        inputEl.disabled = false;
-        dot.className = 'header-dot ready';
-        badge.textContent = '🧮 CPU';
-        return;
-      } catch(e2) {
-        showError(e2.message);
-      }
-    } else {
-      showError(e.message);
     }
   }
 }
 
-function showError(msg) {
-  dot.className = 'header-dot';
-  loadScreen.innerHTML = `
-    <div class="error-box">
+function showError(title, body) {
+  hdot.className = 'hdot';
+  loading.innerHTML = `
+    <div class="errbox">
       <div style="font-size:32px">✕</div>
-      <div class="error-title">読み込みエラー</div>
-      <div class="error-body">${msg}<br><br>Wi-Fi接続を確認して再試行してください。</div>
-      <button class="retry-btn" onclick="location.reload()">再試行</button>
+      <div class="errtitle">${title}</div>
+      <div class="errbody">${body}</div>
+      <button class="rbtn" onclick="location.reload()">再試行</button>
     </div>`;
 }
 
 // ── 送信 ──
-async function sendMessage() {
-  const text = inputEl.value.trim();
-  if (!text || isGenerating || !generator) return;
-  isGenerating = true;
-  sendBtn.disabled = true;
-  inputEl.value = '';
-  inputEl.style.height = 'auto';
-  hideEmptyState();
-  appendMessage('user', text);
+async function send() {
+  const text = inp.value.trim();
+  if (!text || busy || !engine) return;
+  busy = true; sbtn.disabled = true;
+  inp.value = ''; inp.style.height = 'auto';
+  removeEmpty();
+  addMsg('user', text);
   history.push({ role: 'user', content: text });
-  const aiBubble = appendMessage('ai', '');
-  aiBubble.classList.add('streaming');
+  const bubble = addMsg('ai', '');
+  bubble.classList.add('streaming');
   let reply = '';
   try {
-    const streamer = new TextStreamer(generator.tokenizer, {
-      skip_prompt: true, skip_special_tokens: true,
-      callback_function: (token) => { reply += token; aiBubble.textContent = reply; scrollBottom(); }
+    const stream = await engine.chat.completions.create({
+      messages: [
+        { role: 'system', content: 'あなたは親切で役立つAIアシスタントです。日本語で簡潔にわかりやすく答えてください。' },
+        ...history
+      ],
+      stream: true, temperature: 0.7, max_tokens: 512
     });
-    await generator(
-      [{ role: 'system', content: 'あなたは親切で役立つAIアシスタントです。日本語で簡潔にわかりやすく答えてください。' }, ...history],
-      { max_new_tokens: 512, temperature: 0.7, do_sample: true, streamer }
-    );
-    aiBubble.classList.remove('streaming');
+    for await (const chunk of stream) {
+      const delta = chunk.choices[0]?.delta?.content || '';
+      reply += delta;
+      bubble.textContent = reply;
+      scrollBot();
+    }
+    bubble.classList.remove('streaming');
     history.push({ role: 'assistant', content: reply });
   } catch(e) {
-    aiBubble.classList.remove('streaming');
-    aiBubble.textContent = '⚠️ エラーが発生しました。';
+    bubble.classList.remove('streaming');
+    bubble.textContent = '⚠️ エラーが発生しました。';
     history.pop();
   } finally {
-    isGenerating = false;
-    sendBtn.disabled = !inputEl.value.trim();
-    inputEl.focus();
+    busy = false;
+    sbtn.disabled = !inp.value.trim();
+    inp.focus();
   }
 }
 
-function hideEmptyState() { const es = document.getElementById('empty-state'); if(es) es.remove(); }
-function appendMessage(role, text) {
-  const row = document.createElement('div'); row.className = `msg-row ${role}`;
-  const bubble = document.createElement('div'); bubble.className = 'bubble'; bubble.textContent = text;
-  row.appendChild(bubble); messagesEl.appendChild(row); scrollBottom(); return bubble;
+function removeEmpty() { const e = document.getElementById('empty'); if(e) e.remove(); }
+function addMsg(role, text) {
+  const row = document.createElement('div'); row.className = 'mrow ' + role;
+  const b   = document.createElement('div'); b.className = 'bubble'; b.textContent = text;
+  row.appendChild(b); msgs.appendChild(row); scrollBot(); return b;
 }
-function scrollBottom() { messagesEl.scrollTo({ top: messagesEl.scrollHeight, behavior: 'smooth' }); }
+function scrollBot() { msgs.scrollTo({ top: msgs.scrollHeight, behavior: 'smooth' }); }
 
-inputEl.addEventListener('input', () => {
-  inputEl.style.height = 'auto';
-  inputEl.style.height = Math.min(inputEl.scrollHeight, 120) + 'px';
-  sendBtn.disabled = !inputEl.value.trim() || isGenerating;
+inp.addEventListener('input', () => {
+  inp.style.height = 'auto';
+  inp.style.height = Math.min(inp.scrollHeight, 120) + 'px';
+  sbtn.disabled = !inp.value.trim() || busy;
 });
-inputEl.addEventListener('keydown', e => { if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); sendMessage(); } });
-sendBtn.addEventListener('click', sendMessage);
-window.useSuggestion = (el) => { inputEl.value = el.textContent; sendMessage(); };
+inp.addEventListener('keydown', e => { if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); send(); }});
+sbtn.addEventListener('click', send);
+window.useSug = el => { inp.value = el.textContent; send(); };
 
 init();
 </script>
